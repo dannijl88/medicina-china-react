@@ -1,0 +1,20 @@
+TU TAROT, TU GUIA
+
+Material de ejemplo para la descarga protegida de la formacion.
+
+Bloque 1. Fundamentos del tarot
+- Que es una lectura simbolica
+- Como preparar una sesion de estudio
+- Estructura general de una baraja
+
+Bloque 2. Arcanos mayores
+- Significados base
+- Luz y sombra
+- Contexto segun la pregunta
+
+Bloque 3. Practica
+- Tirada de tres cartas
+- Lectura de situacion, bloqueo y siguiente paso
+- Registro de interpretaciones
+
+Este archivo sirve como ejemplo funcional de descarga tras compra.

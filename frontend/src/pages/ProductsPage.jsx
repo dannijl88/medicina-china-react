@@ -1,6 +1,21 @@
 import { PageHero } from '../components/PageHero';
+import { ReviewsSection } from '../components/ReviewsSection';
 
-export function ProductsPage({ products, intro }) {
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+export function ProductsPage({ auth, products, intro }) {
+  const reviewItems = products.map((product) => ({
+    key: product.slug || slugify(product.title),
+    label: product.title
+  }));
+
   return (
     <main className="section page-section">
       <PageHero
@@ -19,6 +34,7 @@ export function ProductsPage({ products, intro }) {
           </article>
         ))}
       </div>
+      <ReviewsSection auth={auth} initialItemKey={reviewItems[0]?.key} items={reviewItems} reviewableType="PRODUCT" title="Reseñas de productos" />
     </main>
   );
 }

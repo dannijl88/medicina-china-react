@@ -63,4 +63,9 @@ public class AppointmentController {
     ) {
         return appointmentService.updateAppointmentStatus(appointmentId, authentication.getName(), request);
     }
+
+    @DeleteMapping("/admin/{appointmentId}")
+    public void deleteAppointmentAsAdmin(@PathVariable Long appointmentId, Authentication authentication) {
+        appointmentService.deleteAppointment(appointmentId, authentication.getName());
+    }
 }

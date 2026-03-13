@@ -18,6 +18,7 @@ export function LoginPage({ auth, profile, setAuth, logout }) {
   });
   const [loadingAuth, setLoadingAuth] = useState(false);
   const [error, setError] = useState('');
+  const isAdmin = (profile?.roles || auth?.roles || []).includes('ROLE_ADMIN');
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -42,8 +43,8 @@ export function LoginPage({ auth, profile, setAuth, logout }) {
     <main className="section page-section">
       <PageHero
         eyebrow="Login"
-        title="Acceso privado para clientes y administracion"
-        description="Pagina independiente para entrar al area privada, crear cuenta y pasar despues a la gestion de citas."
+        title="Acceso privado para clientes y administración"
+        description="Página independiente para entrar al área privada, crear cuenta y pasar después a la gestión de citas."
       />
 
       <section className="access-section">
@@ -51,7 +52,7 @@ export function LoginPage({ auth, profile, setAuth, logout }) {
           <span>Zona privada</span>
           <h2>Reserva, consulta y gestiona tus sesiones online</h2>
           <p>
-            Desde aqui el cliente puede acceder a su espacio y gestionar sus citas, mientras administracion controla
+            Desde aquí el cliente puede acceder a su espacio y gestionar sus citas, mientras administración controla
             toda la agenda.
           </p>
 
@@ -74,7 +75,7 @@ export function LoginPage({ auth, profile, setAuth, logout }) {
                   onClick={() => setMode('login')}
                   type="button"
                 >
-                  Iniciar sesion
+                  Iniciar sesión
                 </button>
                 <button
                   className={`mode-pill ${mode === 'register' ? 'active' : ''}`}
@@ -100,7 +101,7 @@ export function LoginPage({ auth, profile, setAuth, logout }) {
                       />
                     </label>
                     <label>
-                      Telefono
+                      Teléfono
                       <input
                         type="text"
                         value={form.phone}
@@ -131,7 +132,7 @@ export function LoginPage({ auth, profile, setAuth, logout }) {
                 </label>
                 {error ? <p className="error-text">{error}</p> : null}
                 <button className="button primary full" disabled={loadingAuth} type="submit">
-                  {loadingAuth ? 'Procesando...' : mode === 'login' ? 'Iniciar sesion' : 'Crear cuenta'}
+                  {loadingAuth ? 'Procesando...' : mode === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
                 </button>
               </form>
             </>
@@ -144,11 +145,11 @@ export function LoginPage({ auth, profile, setAuth, logout }) {
                   <div key={benefit} className="benefit-item">{benefit}</div>
                 ))}
               </div>
-              <Link className="button primary full" to="/citas">
-                Ir a mis citas
+              <Link className="button primary full" to={isAdmin ? '/admin' : '/citas'}>
+                {isAdmin ? 'Ir al panel admin' : 'Ir a mis citas'}
               </Link>
               <button className="button secondary full" onClick={logout} type="button">
-                Cerrar sesion
+                Cerrar sesión
               </button>
             </div>
           )}

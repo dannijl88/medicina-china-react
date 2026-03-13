@@ -21,6 +21,7 @@ export function SiteHeader({ isLoggedIn }) {
           <NavLink to="/">Inicio</NavLink>
           <NavLink to="/terapias">Terapias</NavLink>
           <NavLink to="/talleres">Talleres</NavLink>
+          <NavLink to="/formaciones">Formaciones</NavLink>
           <NavLink to="/productos">Productos</NavLink>
           <NavLink to="/citas">Citas</NavLink>
           <NavLink to="/contacto">Contacto</NavLink>

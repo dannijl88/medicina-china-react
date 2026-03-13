@@ -1,15 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   cancelAppointment,
   createAppointment,
-  fetchAllAppointments,
   fetchMyAppointments,
-  updateAppointment,
-  updateAppointmentStatus
+  updateAppointment
 } from '../api';
 import { PageHero } from '../components/PageHero';
-
-const statusOptions = ['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED'];
 
 function toDatetimeLocalInput(value) {
   if (!value) {
@@ -26,9 +22,8 @@ function formatDateLabel(value) {
   });
 }
 
-export function AppointmentsPage({ auth, profile, therapies }) {
+export function AppointmentsPage({ auth, therapies }) {
   const [appointments, setAppointments] = useState([]);
-  const [adminAppointments, setAdminAppointments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -38,8 +33,6 @@ export function AppointmentsPage({ auth, profile, therapies }) {
     appointmentAt: '',
     notes: ''
   });
-
-  const isAdmin = useMemo(() => (profile?.roles || auth?.roles || []).includes('ROLE_ADMIN'), [auth, profile]);
 
   useEffect(() => {
     async function loadAppointments() {
@@ -54,12 +47,6 @@ export function AppointmentsPage({ auth, profile, therapies }) {
         const myAppointments = await fetchMyAppointments(auth.token);
         setAppointments(myAppointments);
 
-        if (isAdmin) {
-          const allAppointments = await fetchAllAppointments(auth.token);
-          setAdminAppointments(allAppointments);
-        } else {
-          setAdminAppointments([]);
-        }
       } catch (loadError) {
         setError(loadError.message);
       } finally {
@@ -68,7 +55,7 @@ export function AppointmentsPage({ auth, profile, therapies }) {
     }
 
     loadAppointments();
-  }, [auth, isAdmin]);
+  }, [auth]);
 
   async function refreshAppointments() {
     if (!auth?.token) {
@@ -77,11 +64,6 @@ export function AppointmentsPage({ auth, profile, therapies }) {
 
     const myAppointments = await fetchMyAppointments(auth.token);
     setAppointments(myAppointments);
-
-    if (isAdmin) {
-      const allAppointments = await fetchAllAppointments(auth.token);
-      setAdminAppointments(allAppointments);
-    }
   }
 
   function startEdit(appointment) {
@@ -144,19 +126,6 @@ export function AppointmentsPage({ auth, profile, therapies }) {
     }
   }
 
-  async function handleStatusChange(appointmentId, status) {
-    if (!auth?.token) {
-      return;
-    }
-
-    try {
-      await updateAppointmentStatus(auth.token, appointmentId, status);
-      await refreshAppointments();
-    } catch (statusError) {
-      setError(statusError.message);
-    }
-  }
-
   if (!auth) {
     return (
       <main className="section page-section">
@@ -177,7 +146,7 @@ export function AppointmentsPage({ auth, profile, therapies }) {
       <PageHero
         eyebrow="Citas"
         title="Reserva y organiza tu calendario de bienestar"
-        description="Espacio privado para solicitar nuevas citas, revisar tus sesiones y, si eres admin, gestionar toda la agenda."
+        description="Espacio privado para solicitar nuevas citas, revisar tus sesiones y modificar tus reservas."
       />
 
       <section className="appointments-layout">
@@ -274,43 +243,6 @@ export function AppointmentsPage({ auth, profile, therapies }) {
           </div>
         </article>
       </section>
-
-      {isAdmin ? (
-        <section className="admin-appointments">
-          <div className="section-heading">
-            <span>Administracion</span>
-            <h2>Agenda global de citas</h2>
-          </div>
-
-          <div className="appointment-stack">
-            {adminAppointments.map((appointment) => (
-              <div key={appointment.id} className="appointment-item admin-item">
-                <div>
-                  <strong>{appointment.customerName}</strong>
-                  <p>{appointment.customerEmail}</p>
-                  <small>
-                    {appointment.serviceName} | {formatDateLabel(appointment.appointmentAt)}
-                  </small>
-                </div>
-
-                <label className="status-editor">
-                  Estado
-                  <select
-                    value={appointment.status}
-                    onChange={(event) => handleStatusChange(appointment.id, event.target.value)}
-                  >
-                    {statusOptions.map((status) => (
-                      <option key={status} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-            ))}
-          </div>
-        </section>
-      ) : null}
     </main>
   );
 }

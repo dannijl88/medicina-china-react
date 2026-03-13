@@ -92,6 +92,15 @@ public class AppointmentService {
         return toResponse(appointmentRepository.save(appointment));
     }
 
+    public void deleteAppointment(Long appointmentId, String email) {
+        AppUser user = findUserByEmail(email);
+        if (user.getRole() != UserRole.ROLE_ADMIN) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Solo administracion puede borrar citas");
+        }
+        Appointment appointment = findAppointment(appointmentId);
+        appointmentRepository.delete(appointment);
+    }
+
     private AppUser findUserByEmail(String email) {
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));

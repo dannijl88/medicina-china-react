@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableMethodSecurity
-@EnableConfigurationProperties(JwtProperties.class)
+@EnableConfigurationProperties({JwtProperties.class, StripeProperties.class})
 public class SecurityConfig {
 
     @Bean
@@ -33,6 +33,13 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/public/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/catalog").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/trainings").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/trainings/*").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/reviews").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/reviews/featured").permitAll()
+                .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/stripe/webhook").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

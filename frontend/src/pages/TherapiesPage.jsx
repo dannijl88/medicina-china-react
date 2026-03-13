@@ -1,6 +1,21 @@
 import { PageHero } from '../components/PageHero';
+import { ReviewsSection } from '../components/ReviewsSection';
 
-export function TherapiesPage({ therapies, intro }) {
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+export function TherapiesPage({ auth, therapies, intro }) {
+  const reviewItems = therapies.map((therapy) => ({
+    key: therapy.slug || slugify(therapy.title),
+    label: therapy.title
+  }));
+
   return (
     <main className="section page-section">
       <PageHero
@@ -19,6 +34,7 @@ export function TherapiesPage({ therapies, intro }) {
           </article>
         ))}
       </div>
+      <ReviewsSection auth={auth} initialItemKey={reviewItems[0]?.key} items={reviewItems} reviewableType="THERAPY" title="Reseñas de terapias" />
     </main>
   );
 }

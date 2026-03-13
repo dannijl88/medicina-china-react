@@ -32,6 +32,12 @@ export const siteContent = {
         to: '/talleres'
       },
       {
+        title: 'Formaciones',
+        description: 'Cursos descargables para estudiar a tu ritmo con acceso tras la compra.',
+        action: 'Ver formaciones',
+        to: '/formaciones'
+      },
+      {
         title: 'Velas',
         description: 'Velas personalizadas, y exclusivas para ti, hechas de manera artesanal.',
         action: 'Mas informacion',

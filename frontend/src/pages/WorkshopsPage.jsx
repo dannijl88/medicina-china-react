@@ -1,6 +1,21 @@
 import { PageHero } from '../components/PageHero';
+import { ReviewsSection } from '../components/ReviewsSection';
 
-export function WorkshopsPage({ workshops, intro }) {
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+export function WorkshopsPage({ auth, workshops, intro }) {
+  const reviewItems = workshops.map((workshop) => ({
+    key: workshop.slug || slugify(workshop.title),
+    label: workshop.title
+  }));
+
   return (
     <main className="section page-section">
       <PageHero
@@ -20,6 +35,7 @@ export function WorkshopsPage({ workshops, intro }) {
           </article>
         ))}
       </div>
+      <ReviewsSection auth={auth} initialItemKey={reviewItems[0]?.key} items={reviewItems} reviewableType="WORKSHOP" title="Reseñas de talleres" />
     </main>
   );
 }
