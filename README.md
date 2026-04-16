@@ -1,46 +1,31 @@
 # Medicina China Codex
 
-Aplicacion full-stack para una web corporativa de terapias, talleres, formaciones descargables y productos artesanales.
+Web corporativa estática para terapias, talleres, formaciones y productos artesanales.
+
+## Estado actual del proyecto
+
+El proyecto ha quedado convertido a una web solo frontend.
+
+- Sin backend
+- Sin base de datos
+- Sin login ni panel de administración
+- Sin sistema de citas online
+- Sin sistema de reseñas dinámicas
+- Sin compra online integrada
+
+La web funciona como escaparate corporativo e informativo, con contacto por email, teléfono y WhatsApp.
 
 ## Stack
 
-- Frontend: React + Vite
-- Backend: Spring Boot + Spring Security + JWT + JPA + MySQL + Maven
+- React
+- Vite
+- React Router con `HashRouter`
 
 ## Estructura
 
-- `frontend`: web corporativa multipagina con home, terapias, talleres, formaciones, productos, contacto, login y citas
-- `backend`: API REST con contenido publico, autenticacion, gestion de citas, compras/descargas de formaciones y panel admin
-- `reviews`: sistema propio de reseñas con moderacion para terapias, talleres, productos y formaciones
+- `frontend`: aplicación completa lista para desarrollo, build y despliegue en hosting estático
 
-## Arranque
-
-### Backend
-
-```bash
-cd backend
-mvn spring-boot:run
-```
-
-### Base de datos MySQL
-
-```bash
-mysql-workbench -> ejecutar database/mysql-workbench.sql
-```
-
-### Variables utiles para backend
-
-```bash
-DB_USERNAME=root
-DB_PASSWORD=sasa
-FRONTEND_BASE_URL=http://localhost:5173
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-```
-
-Si `STRIPE_SECRET_KEY` esta vacia, la compra de formaciones funciona en modo simulado para poder probar el flujo completo sin cobro real.
-
-### Frontend
+## Desarrollo
 
 ```bash
 cd frontend
@@ -48,71 +33,42 @@ npm.cmd install
 npm.cmd run dev
 ```
 
-## Credenciales demo
+## Build para producción
 
-- `cliente@medicinachina.com` / `Bienestar2026!`
-- `admin@medicinachina.com` / `Relax2026!`
+```bash
+cd frontend
+npm.cmd run build
+```
 
-## Panel admin
+El resultado final se genera en:
 
-- Ruta frontend: `/admin`
-- Visible solo para `ROLE_ADMIN`
-- Permite gestionar:
-  - terapias
-  - talleres
-  - productos
-  - formaciones
-  - citas
-  - reseñas
-  - usuarios
+```text
+frontend/dist
+```
 
-## Endpoints
+## Despliegue
 
-- `POST /api/auth/login`
-- `POST /api/auth/register`
-- `GET /api/public/home`
-- `GET /api/user/me`
-- `POST /api/appointments`
-- `GET /api/appointments/me`
-- `PUT /api/appointments/{id}`
-- `DELETE /api/appointments/{id}`
-- `GET /api/appointments`
-- `PUT /api/appointments/{id}/status`
-- `GET /api/trainings`
-- `GET /api/trainings/{slug}`
-- `GET /api/catalog?type=THERAPY`
-- `POST /api/trainings/{id}/checkout`
-- `GET /api/trainings/purchases/me`
-- `POST /api/trainings/purchases/{id}/simulate-success`
-- `GET /api/trainings/{id}/download`
-- `POST /api/stripe/webhook`
-- `GET /api/reviews?type=THERAPY&itemKey=acupuntura`
-- `POST /api/reviews`
-- `GET /api/reviews/pending`
-- `PUT /api/reviews/{id}/status`
-- `GET /api/catalog/admin?type=THERAPY`
-- `POST /api/catalog/admin`
-- `PUT /api/catalog/admin/{id}`
-- `DELETE /api/catalog/admin/{id}`
-- `GET /api/admin/trainings`
-- `POST /api/admin/trainings`
-- `PUT /api/admin/trainings/{id}`
-- `DELETE /api/admin/trainings/{id}`
-- `GET /api/admin/users`
-- `DELETE /api/admin/users/{id}`
-- `DELETE /api/appointments/admin/{id}`
+La aplicación usa `HashRouter`, así que no necesita configuración especial de `htaccess` para que funcionen las rutas internas en un hosting estático.
 
-## Stripe
+Solo hay que subir el contenido de:
 
-- Stripe no tiene coste fijo por usar Checkout en modo test.
-- En modo test puedes integrar y probar gratis.
-- El cobro real empieza cuando pongas tus claves reales y uses modo live.
-- Mientras no pongas claves reales, la app usa una pantalla de pago simulado para validar compra y descarga.
+```text
+frontend/dist
+```
 
-## Reseñas
+## Páginas incluidas
 
-- Las reseñas son internas, no dependen de Google.
-- Un usuario logueado puede dejar una reseña por elemento.
-- Las reseñas nuevas quedan en `PENDING`.
-- El admin puede aprobar o rechazar desde `Login > Mi espacio`.
-- Solo las reseñas `APPROVED` se muestran en la web.
+- Inicio
+- Terapias
+- Talleres
+- Formaciones
+- Productos
+- Contacto
+- Aviso legal
+- Privacidad
+- Cookies
+
+## Notas
+
+- La página de `Condiciones` sigue existiendo en el código, pero está oculta del footer por si en el futuro se reactiva una parte de compra o contratación online.
+- El formulario de contacto actual prepara un email desde el navegador del usuario; no hay envío automático por servidor.
