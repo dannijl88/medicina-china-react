@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { createTrainingCheckout, downloadTraining, fetchMyTrainingPurchases, fetchTrainingBySlug } from '../api';
-import { ReviewsSection } from '../components/ReviewsSection';
 
 function formatPrice(priceCents, currency) {
   return new Intl.NumberFormat('es-ES', {
@@ -10,120 +7,17 @@ function formatPrice(priceCents, currency) {
   }).format(priceCents / 100);
 }
 
-export function TrainingDetailPage({ auth }) {
+export function TrainingDetailPage({ trainings }) {
   const { slug } = useParams();
-  const [training, setTraining] = useState(null);
-  const [purchases, setPurchases] = useState([]);
-  const [error, setError] = useState('');
-  const [info, setInfo] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    let ignore = false;
-
-    async function load() {
-      setLoading(true);
-      setError('');
-
-      try {
-        const [trainingData, purchasesData] = await Promise.all([
-          fetchTrainingBySlug(slug, auth?.token),
-          auth?.token ? fetchMyTrainingPurchases(auth.token) : Promise.resolve([])
-        ]);
-
-        if (!ignore) {
-          setTraining(trainingData);
-          setPurchases(purchasesData);
-        }
-      } catch (loadError) {
-        if (!ignore) {
-          setError(loadError.message);
-        }
-      } finally {
-        if (!ignore) {
-          setLoading(false);
-        }
-      }
-    }
-
-    load();
-
-    return () => {
-      ignore = true;
-    };
-  }, [auth, slug]);
-
-  async function handleCheckout() {
-    if (!auth?.token || !training) {
-      return;
-    }
-
-    setSubmitting(true);
-    setError('');
-    setInfo('');
-
-    try {
-      const session = await createTrainingCheckout(auth.token, training.id);
-      if (session.alreadyPurchased) {
-        setInfo('Ya tienes acceso a esta formación. Puedes descargarla debajo.');
-        return;
-      }
-
-      window.location.href = session.checkoutUrl;
-    } catch (checkoutError) {
-      setError(checkoutError.message);
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  async function handleDownload() {
-    if (!auth?.token || !training) {
-      return;
-    }
-
-    setSubmitting(true);
-    setError('');
-
-    try {
-      const file = await downloadTraining(auth.token, training.id);
-      const objectUrl = window.URL.createObjectURL(file.blob);
-      const link = document.createElement('a');
-      link.href = objectUrl;
-      link.download = file.fileName;
-      link.click();
-      window.URL.revokeObjectURL(objectUrl);
-    } catch (downloadError) {
-      setError(downloadError.message);
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  if (loading) {
-    return (
-      <main className="section page-section">
-        <div className="empty-state">Cargando formación...</div>
-      </main>
-    );
-  }
-
-  if (error && !training) {
-    return (
-      <main className="section page-section">
-        <div className="empty-state">{error}</div>
-      </main>
-    );
-  }
+  const training = trainings.find((item) => item.slug === slug);
 
   if (!training) {
-    return null;
+    return (
+      <main className="section page-section">
+        <div className="empty-state">No hemos encontrado esa formación.</div>
+      </main>
+    );
   }
-
-  const owned = training.accessGranted || purchases.some(
-    (purchase) => purchase.trainingId === training.id && purchase.status === 'PAID'
-  );
 
   return (
     <main className="section page-section">
@@ -131,7 +25,7 @@ export function TrainingDetailPage({ auth }) {
         <article className="training-detail-card">
           <img alt={training.title} className="training-detail-image" src={training.imageUrl} />
           <div className="training-detail-copy">
-            <span className="eyebrow">Formación descargable</span>
+            <span className="eyebrow">Formación</span>
             <h1 className="page-title">{training.title}</h1>
             <p className="page-description">{training.description}</p>
 
@@ -165,34 +59,22 @@ export function TrainingDetailPage({ auth }) {
               </div>
             ) : null}
 
-            {error ? <p className="error-text">{error}</p> : null}
-            {info ? <p className="soft-text">{info}</p> : null}
+            <div className="contact-highlight-card">
+              <h3>Solicitar formación</h3>
+              <p>
+                Para acceder a esta formación, solicita la información desde contacto. El pago se realiza por Bizum y,
+                una vez confirmado, se envía el material al correo indicado.
+              </p>
+              <p><strong>Bizum:</strong> +34 600 123 456</p>
+            </div>
 
             <div className="hero-actions">
-              {!auth?.token ? (
-                <Link className="button primary" to="/login">Inicia sesión para comprar</Link>
-              ) : owned ? (
-                <button className="button primary" disabled={submitting} onClick={handleDownload} type="button">
-                  Descargar formación
-                </button>
-              ) : (
-                <button className="button primary" disabled={submitting} onClick={handleCheckout} type="button">
-                  Comprar con Stripe
-                </button>
-              )}
+              <Link className="button primary" to="/contacto">Solicitar</Link>
               <Link className="button secondary" to="/formaciones">Volver a formaciones</Link>
             </div>
           </div>
         </article>
       </section>
-
-      <ReviewsSection
-        auth={auth}
-        initialItemKey={training.slug}
-        items={[{ key: training.slug, label: training.title }]}
-        reviewableType="TRAINING"
-        title="Reseñas de esta formación"
-      />
     </main>
   );
 }

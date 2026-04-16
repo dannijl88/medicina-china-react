@@ -21,9 +21,12 @@ html {
 body {
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(191, 147, 100, 0.22), transparent 22%),
-    radial-gradient(circle at right, rgba(125, 155, 123, 0.2), transparent 30%),
-    linear-gradient(180deg, #f7f1e8 0%, #f1e6d7 100%);
+    linear-gradient(rgba(248, 245, 239, 0.78), rgba(245, 240, 232, 0.84)),
+    url("./assets/leaf-photo.jpeg"),
+    linear-gradient(180deg, #f5f1e8 0%, #efe8dc 100%);
+  background-size: auto, cover, auto;
+  background-position: center, center top, center;
+  background-attachment: fixed;
   color: var(--text);
 }
 
@@ -60,6 +63,7 @@ select {
   justify-content: space-between;
   align-items: center;
   gap: 0.8rem;
+  position: relative;
   padding: 0.9rem 1.1rem;
   border: 1px solid var(--line);
   border-radius: 24px;
@@ -133,6 +137,41 @@ h3 {
   justify-content: flex-end;
   flex: 1;
   min-width: 0;
+}
+
+.menu-toggle {
+  display: none;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 250, 243, 0.9);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.28rem;
+  box-shadow: 0 10px 24px rgba(58, 72, 60, 0.08);
+}
+
+.menu-toggle span {
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--accent-deep);
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.menu-toggle.open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.menu-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
 }
 
 .nav-links a {
@@ -375,7 +414,7 @@ h1 {
 }
 
 .card-image {
-  height: 220px;
+  height: 260px;
   margin-bottom: 1rem;
 }
 
@@ -413,6 +452,12 @@ h1 {
   max-width: none;
 }
 
+.content-group {
+  display: grid;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
 .page-hero {
   border-radius: 34px;
   padding: 2.2rem 2.4rem;
@@ -428,6 +473,20 @@ h1 {
 .content-card strong,
 .product-card small {
   color: var(--accent-deep);
+}
+
+.content-card,
+.product-card,
+.training-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.content-card strong,
+.product-card small {
+  margin: 0;
 }
 
 .pill,
@@ -470,17 +529,22 @@ h1 {
 }
 
 .training-card {
-  display: grid;
-  align-content: start;
+  gap: 0.7rem;
 }
 
 .training-card-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 1rem;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: auto;
   flex-wrap: wrap;
+  width: 100%;
+}
+
+.cta-button {
+  margin-top: auto;
+  align-self: start;
 }
 
 .training-detail-shell {
@@ -545,6 +609,18 @@ h1 {
   padding-left: 1.2rem;
   color: var(--muted);
   line-height: 1.7;
+}
+
+.contact-highlight-card {
+  padding: 1.2rem 1.3rem;
+  border-radius: 22px;
+  background: rgba(125, 155, 123, 0.08);
+  border: 1px solid var(--line);
+}
+
+.contact-highlight-card h3,
+.contact-highlight-card p {
+  margin-top: 0;
 }
 
 .trainings-intro-grid,
@@ -966,8 +1042,42 @@ h1 {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  align-items: center;
+  align-items: flex-start;
   color: var(--muted);
+}
+
+.footer-brand {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem 1.2rem;
+  justify-content: flex-end;
+}
+
+.footer-links a {
+  color: var(--muted);
+}
+
+.footer-links a:hover {
+  color: var(--accent-deep);
+}
+
+.legal-card {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.legal-card h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.legal-card p {
+  margin: 0;
 }
 
 @media (max-width: 980px) {
@@ -991,16 +1101,10 @@ h1 {
   .stack-card,
   .appointment-item,
   .admin-row-card,
-  .header-shell,
   .footer,
   .family-card {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .nav-links {
-    flex-wrap: wrap;
-    justify-content: flex-start;
   }
 
   .admin-panel-tabs {
@@ -1011,9 +1115,56 @@ h1 {
     padding: 2.4rem;
   }
 
+  .hero-actions .button,
+  .form-actions .button,
+  .training-card-footer .button,
+  .cta-button {
+    width: 100%;
+  }
+
+  .family-card .button,
+  .hero-actions .button.secondary,
+  .hero-actions .button.primary {
+    width: 100%;
+  }
+
+  .section,
+  .hero,
+  .page-section {
+    padding-top: 1.4rem;
+    padding-bottom: 2.2rem;
+  }
+
+  .page-hero,
+  .preview-card,
+  .content-card,
+  .product-card,
+  .contact-card,
+  .highlight-card,
+  .appointment-form-card,
+  .appointment-list-card,
+  .empty-state,
+  .family-card,
+  .auth-card {
+    padding: 1.3rem;
+    border-radius: 24px;
+  }
+
+  .preview-card h3,
+  .content-card h3,
+  .product-card h3,
+  .stack-card h3,
+  .contact-card h3,
+  .appointment-form-card h3,
+  .appointment-list-card h3,
+  .family-card h3 {
+    font-size: 1.7rem;
+  }
+
   .stack-image {
     width: 100%;
     min-width: 0;
+    height: 220px;
   }
 
   .appointment-meta {
@@ -1022,6 +1173,47 @@ h1 {
 
   .brand-identity {
     align-items: flex-start;
+  }
+
+  .footer-links {
+    justify-content: flex-start;
+  }
+
+  .header-shell {
+    align-items: center;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: calc(100% + 0.7rem);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.45rem;
+    padding: 0.9rem;
+    border-radius: 22px;
+    border: 1px solid var(--line);
+    background: rgba(255, 250, 243, 0.96);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(14px);
+    z-index: 30;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    width: 100%;
+    padding: 0.8rem 0.95rem;
+    font-size: 1rem;
   }
 }
 
@@ -1034,12 +1226,72 @@ h1 {
   }
 
   h1 {
-    font-size: 3rem;
+    font-size: 2.2rem;
   }
 
   .hero-copy,
   .page-hero {
     padding: 1.8rem;
+  }
+
+  .brand-logo-shell {
+    width: 54px;
+    height: 54px;
+  }
+
+  .brand-mark {
+    font-size: 1.45rem;
+  }
+
+  .brand-subtitle {
+    font-size: 0.84rem;
+    white-space: normal;
+  }
+
+  .hero-copy {
+    padding: 1.7rem;
+  }
+
+  .hero-card {
+    padding: 1.5rem;
+  }
+
+  .hero-card .card-title {
+    font-size: 1.1rem;
+  }
+
+  .training-detail-image {
+    min-height: 240px;
+  }
+
+  .card-image {
+    height: 230px;
+  }
+
+  .section-heading h2 {
+    font-size: 1.8rem;
+  }
+
+  .preview-card h3,
+  .content-card h3,
+  .product-card h3,
+  .stack-card h3,
+  .contact-card h3,
+  .appointment-form-card h3,
+  .appointment-list-card h3,
+  .family-card h3 {
+    font-size: 1.5rem;
+  }
+
+  .review-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .contact-grid,
+  .access-section,
+  .appointments-layout {
+    gap: 1rem;
   }
 
 }

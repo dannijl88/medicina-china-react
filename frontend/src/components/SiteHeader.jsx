@@ -1,7 +1,15 @@
-import { Link, NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import brandLogo from '../assets/brand-logo-optimized.png';
 
-export function SiteHeader({ isLoggedIn }) {
+export function SiteHeader() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
   return (
     <header className="site-header">
       <div className="header-shell">
@@ -17,15 +25,26 @@ export function SiteHeader({ isLoggedIn }) {
           </div>
         </Link>
 
-        <nav className="nav-links">
+        <button
+          aria-controls="site-navigation"
+          aria-expanded={menuOpen}
+          aria-label={menuOpen ? 'Cerrar menu' : 'Abrir menu'}
+          className={`menu-toggle ${menuOpen ? 'open' : ''}`}
+          onClick={() => setMenuOpen((current) => !current)}
+          type="button"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
+        <nav className={`nav-links ${menuOpen ? 'open' : ''}`} id="site-navigation">
           <NavLink to="/">Inicio</NavLink>
           <NavLink to="/terapias">Terapias</NavLink>
           <NavLink to="/talleres">Talleres</NavLink>
           <NavLink to="/formaciones">Formaciones</NavLink>
           <NavLink to="/productos">Productos</NavLink>
-          <NavLink to="/citas">Citas</NavLink>
           <NavLink to="/contacto">Contacto</NavLink>
-          <NavLink to="/login">{isLoggedIn ? 'Mi espacio' : 'Login'}</NavLink>
         </nav>
       </div>
     </header>

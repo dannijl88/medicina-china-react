@@ -421,5 +421,117 @@ export const siteContent = {
       image:
         'https://medicina-tradicionalchina.es/wp-content/uploads/elementor/thumbs/WhatsApp-Image-2026-01-15-at-13.23.27-rhp2tte9plxr0pu4mqls6mngp3ric3m5oykfej93mo.jpeg'
     }
+  ],
+  trainings: [
+    {
+      slug: 'tu-tarot-tu-guia',
+      title: 'Tu Tarot, tu Guia',
+      summary:
+        'Curso para aprender a leer el tarot desde una mirada simbolica, practica e intuitiva.',
+      description:
+        'Una formacion pensada para introducirte en el tarot como herramienta de autoconocimiento. Trabaja arcanos mayores, estructura de tiradas y criterios para interpretar con claridad.',
+      imageUrl:
+        'https://medicina-tradicionalchina.es/wp-content/uploads/elementor/thumbs/tarotgrupal-scaled-qtm7oo1v1psnwa0zb7en84l2tp1su6m00cpfjsd5ls.webp',
+      priceCents: 4900,
+      currency: 'eur',
+      durationLabel: '6 horas',
+      modality: 'Material digital',
+      level: 'Inicial',
+      syllabus: [
+        'Fundamentos del tarot',
+        'Arcanos mayores y simbolismo',
+        'Como formular preguntas',
+        'Tiradas basicas',
+        'Lectura intuitiva y practica'
+      ]
+    },
+    {
+      slug: 'chakras-y-autoequilibrio',
+      title: 'Chakras y Autoequilibrio',
+      summary:
+        'Formacion para comprender chakras, bloqueos energeticos y practicas de armonizacion.',
+      description:
+        'Recorrido formativo para estudiar los centros energeticos, sus manifestaciones emocionales y tecnicas practicas de equilibrado con respiracion, meditacion e intencion.',
+      imageUrl:
+        'https://medicina-tradicionalchina.es/wp-content/uploads/elementor/thumbs/pexels-cup-of-couple-6634238-scaled-rbphwchn5hc98kfu9dhkalj472m2yewonog3weqgtc.webp',
+      priceCents: 5900,
+      currency: 'eur',
+      durationLabel: '8 horas',
+      modality: 'Material digital',
+      level: 'Intermedio',
+      syllabus: [
+        'Mapa de chakras',
+        'Bloqueos energeticos frecuentes',
+        'Practicas de respiracion',
+        'Meditaciones guiadas',
+        'Rutina de autoequilibrio'
+      ]
+    },
+    {
+      slug: 'introduccion-a-la-medicina-energetica',
+      title: 'Introduccion a la Medicina Energetica',
+      summary:
+        'Base teorica y practica para empezar a entender energia, autocuidado y acompanamiento consciente.',
+      description:
+        'Formacion de entrada a conceptos clave de bienestar energetico: presencia, observacion corporal, enfoque holistico y pequenos rituales de cuidado aplicables al dia a dia.',
+      imageUrl:
+        'https://medicina-tradicionalchina.es/wp-content/uploads/elementor/thumbs/acupuntura-scaled-qepxiz4u8dhuknt9u9770fhw26i6hio4qdb2szyffk.webp',
+      priceCents: 6900,
+      currency: 'eur',
+      durationLabel: '10 horas',
+      modality: 'Material digital',
+      level: 'Inicial',
+      syllabus: [
+        'Vision holistica del bienestar',
+        'Energia y cuerpo',
+        'Rutinas de autocuidado',
+        'Herramientas de observacion',
+        'Integracion practica'
+      ]
+    },
+    {
+      slug: 'rituales-con-velas-y-aromaterapia',
+      title: 'Rituales con Velas y Aromaterapia',
+      summary:
+        'Guia para trabajar intencion, preparacion de espacios y pequenos rituales con velas y aromas.',
+      description:
+        'Formacion enfocada en el uso consciente de velas, aromas y preparacion energetica del espacio. Incluye estructura de rituales sencillos, seguridad basica y trabajo de intencion.',
+      imageUrl:
+        'https://medicina-tradicionalchina.es/wp-content/uploads/elementor/thumbs/Imagen-de-WhatsApp-2024-05-20-a-las-15.05.02_25ac3e3e-qog1p3rbhv7pxifns8tgc5z84pvkyn86wzjtcg48tc.webp',
+      priceCents: 5400,
+      currency: 'eur',
+      durationLabel: '7 horas',
+      modality: 'Material digital',
+      level: 'Inicial',
+      syllabus: [
+        'Preparacion del espacio',
+        'Tipos de velas y usos',
+        'Aceites y aromas',
+        'Rituales sencillos',
+        'Buenas practicas'
+      ]
+    },
+    {
+      slug: 'lectura-intuitiva-y-arquetipos',
+      title: 'Lectura Intuitiva y Arquetipos',
+      summary:
+        'Curso para profundizar en simbolos, arquetipos y lectura intuitiva aplicada a procesos personales.',
+      description:
+        'Formacion para trabajar lectura simbolica, observacion de patrones y desarrollo de una interpretacion mas afinada en procesos de acompanamiento y autoconocimiento.',
+      imageUrl:
+        'https://medicina-tradicionalchina.es/wp-content/uploads/elementor/thumbs/lecturadiosas-rhp26scm9qeuknad3s8u3fuwr99rr26wiz664hec2o.jpeg',
+      priceCents: 7900,
+      currency: 'eur',
+      durationLabel: '12 horas',
+      modality: 'Material digital',
+      level: 'Intermedio',
+      syllabus: [
+        'Arquetipos principales',
+        'Lectura simbolica',
+        'Contexto emocional',
+        'Practicas guiadas',
+        'Integracion personal'
+      ]
+    }
   ]
 };

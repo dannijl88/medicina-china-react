@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PreviewCard } from '../components/PreviewCard';
-import { fetchFeaturedReviews } from '../api';
 import homeSefaImage from '../assets/home-sefa.jpg';
 
 function shuffle(items) {
@@ -13,65 +12,35 @@ function shuffle(items) {
   return copy;
 }
 
-function stars(rating) {
-  return '★'.repeat(rating) + '☆'.repeat(5 - rating);
-}
-
 export function HomePage({ home }) {
-  const [featuredReviews, setFeaturedReviews] = useState([]);
+  const [testimonials, setTestimonials] = useState(() => shuffle(home.home.testimonials));
   const [rotationIndex, setRotationIndex] = useState(0);
 
   useEffect(() => {
-    let ignore = false;
-
-    async function loadFeaturedReviews() {
-      try {
-        const reviews = await fetchFeaturedReviews();
-        if (!ignore && reviews.length) {
-          setFeaturedReviews(shuffle(reviews));
-        }
-      } catch {
-        if (!ignore) {
-          setFeaturedReviews([]);
-        }
-      }
-    }
-
-    loadFeaturedReviews();
-    return () => {
-      ignore = true;
-    };
-  }, []);
+    setTestimonials(shuffle(home.home.testimonials));
+  }, [home.home.testimonials]);
 
   useEffect(() => {
-    if (featuredReviews.length <= 3) {
+    if (testimonials.length <= 3) {
       return undefined;
     }
 
     const intervalId = window.setInterval(() => {
-      setRotationIndex((current) => (current + 3) % featuredReviews.length);
+      setRotationIndex((current) => (current + 3) % testimonials.length);
     }, 5000);
 
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [featuredReviews]);
+  }, [testimonials]);
 
   const rotatingTestimonials = useMemo(() => {
-    if (featuredReviews.length) {
-      const visible = [];
-      for (let index = 0; index < Math.min(3, featuredReviews.length); index += 1) {
-        visible.push(featuredReviews[(rotationIndex + index) % featuredReviews.length]);
-      }
-      return visible.map((review) => ({
-        name: review.authorName,
-        text: `"${review.comment}"`,
-        rating: review.rating
-      }));
+    const visible = [];
+    for (let index = 0; index < Math.min(3, testimonials.length); index += 1) {
+      visible.push(testimonials[(rotationIndex + index) % testimonials.length]);
     }
-
-    return home.home.testimonials;
-  }, [featuredReviews, home.home.testimonials, rotationIndex]);
+    return visible;
+  }, [rotationIndex, testimonials]);
 
   return (
     <main>
@@ -84,16 +53,16 @@ export function HomePage({ home }) {
             <div className="hero-actions">
               <Link to="/terapias" className="button primary">{home.hero.primaryAction}</Link>
               <Link to="/productos" className="button secondary">{home.hero.secondaryAction}</Link>
-              <Link to="/citas" className="button secondary">Gestionar citas</Link>
+              <Link to="/contacto" className="button secondary">Contactar</Link>
             </div>
           </div>
 
           <aside className="hero-card">
-            <p className="card-title">Espacio de armonia</p>
+            <p className="card-title">Espacio de armonía</p>
             <ul>
               <li>Acupuntura personalizada</li>
-              <li>Masajes relajantes y energeticos</li>
-              <li>Tarot intuitivo y terapeutico</li>
+              <li>Masajes relajantes y energéticos</li>
+              <li>Tarot intuitivo y terapéutico</li>
               <li>Talleres vivenciales y productos artesanales</li>
             </ul>
           </aside>
@@ -102,7 +71,7 @@ export function HomePage({ home }) {
 
       <section className="section">
         <div className="intro-feature-card">
-          <img alt="Presentacion del espacio de bienestar" className="intro-portrait" src={homeSefaImage} />
+          <img alt="Presentación del espacio de bienestar" className="intro-portrait" src={homeSefaImage} />
           <div className="intro-band intro-band-copy">
             <span className="eyebrow">{home.home.aboutEyebrow}</span>
             <h2>{home.home.aboutTitle}</h2>
@@ -139,7 +108,6 @@ export function HomePage({ home }) {
         <div className="preview-grid">
           {rotatingTestimonials.map((testimonial, index) => (
             <article key={`${testimonial.name}-${index}`} className="preview-card testimonial-card rotating-testimonial-card">
-              {testimonial.rating ? <span className="pill review-stars">{stars(testimonial.rating)}</span> : null}
               <p>{testimonial.text}</p>
               <strong>{testimonial.name}</strong>
             </article>

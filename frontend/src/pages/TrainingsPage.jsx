@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PageHero } from '../components/PageHero';
-import { ReviewsSection } from '../components/ReviewsSection';
-import { fetchTrainings, fetchMyTrainingPurchases } from '../api';
 
 function formatPrice(priceCents, currency) {
   return new Intl.NumberFormat('es-ES', {
@@ -11,91 +8,46 @@ function formatPrice(priceCents, currency) {
   }).format(priceCents / 100);
 }
 
-export function TrainingsPage({ auth }) {
-  const [trainings, setTrainings] = useState([]);
-  const [purchases, setPurchases] = useState([]);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    let ignore = false;
-
-    async function load() {
-      try {
-        const [trainingsData, purchasesData] = await Promise.all([
-          fetchTrainings(auth?.token),
-          auth?.token ? fetchMyTrainingPurchases(auth.token) : Promise.resolve([])
-        ]);
-
-        if (!ignore) {
-          setTrainings(trainingsData);
-          setPurchases(purchasesData);
-        }
-      } catch (loadError) {
-        if (!ignore) {
-          setError(loadError.message);
-        }
-      }
-    }
-
-    load();
-
-    return () => {
-      ignore = true;
-    };
-  }, [auth]);
-
-  const ownedTrainingIds = new Set(
-    purchases.filter((purchase) => purchase.status === 'PAID').map((purchase) => purchase.trainingId)
-  );
-
+export function TrainingsPage({ trainings }) {
   return (
     <main className="section page-section">
       <PageHero
         eyebrow="Formaciones"
         title="Formaciones"
-        description="Formaciones descargables con ficha individual, temario, compra y descarga protegida tras el pago."
+        description="Consulta cada formación, revisa su contenido y solicita el acceso por contacto directo."
       />
-
-      {error ? <p className="error-text">{error}</p> : null}
 
       <section className="section trainings-intro-grid">
         <article className="highlight-card">
-          <h3>Que incluyen</h3>
-          <p>Material descargable, contenido estructurado por bloques y acceso desde tu cuenta una vez confirmada la compra.</p>
+          <h3>Qué incluyen</h3>
+          <p>Material estructurado por bloques, contenidos descargables y una propuesta pensada para estudiar a tu ritmo.</p>
         </article>
         <article className="highlight-card">
-          <h3>Como funciona</h3>
-          <p>Entras en la ficha, revisas el contenido, compras con Stripe o en modo test y despues puedes descargar el material.</p>
+          <h3>Cómo solicitar</h3>
+          <p>Entras en la ficha, revisas el contenido y desde allí solicitas la formación para recibir instrucciones de pago por Bizum.</p>
         </article>
         <article className="highlight-card">
-          <h3>Para quien son</h3>
-          <p>Personas que quieren estudiar a su ritmo temas de tarot, energia y bienestar con una base practica y clara.</p>
+          <h3>Para quién son</h3>
+          <p>Personas que quieren profundizar en tarot, energía y bienestar con un enfoque práctico, claro y accesible.</p>
         </article>
       </section>
 
       <div className="card-grid">
         {trainings.map((training) => (
-          <article key={training.id} className="product-card training-card">
+          <article key={training.slug} className="product-card training-card">
             <img alt={training.title} className="card-image" src={training.imageUrl} />
             <div className="product-badge">{formatPrice(training.priceCents, training.currency)}</div>
             <h3>{training.title}</h3>
             <p>{training.summary}</p>
             <small>{training.modality} · {training.durationLabel}</small>
             <div className="training-card-footer">
-              {ownedTrainingIds.has(training.id) || training.accessGranted ? <span className="pill">Comprada</span> : null}
-              <Link className="inline-link" to={`/formaciones/${training.slug}`}>Ver formacion</Link>
+              <Link className="button secondary cta-button" to={`/formaciones/${training.slug}`}>
+                Ver formación
+              </Link>
             </div>
           </article>
         ))}
       </div>
-
-      <ReviewsSection
-        auth={auth}
-        initialItemKey={trainings[0]?.slug}
-        items={trainings.map((training) => ({ key: training.slug, label: training.title }))}
-        reviewableType="TRAINING"
-        title="Reseñas de formaciones"
-      />
     </main>
   );
 }
