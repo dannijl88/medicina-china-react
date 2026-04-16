@@ -1,4 +1,4 @@
-# Medicina China Codex
+# Medicina China
 
 Web corporativa estática para terapias, talleres, formaciones y productos artesanales.
 
